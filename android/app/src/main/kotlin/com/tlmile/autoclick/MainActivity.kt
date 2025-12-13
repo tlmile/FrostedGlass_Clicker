@@ -3,9 +3,10 @@ package com.tlmile.autoclick
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -19,8 +20,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-import android.os.Bundle
-
 
 
 
@@ -33,43 +32,31 @@ class MainActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        MethodChannel(flutterEngine?.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
-            if (call.method == "checkForUpdate") {
-                checkForUpdate(result)  // 调用检查更新的方法
-            } else {
-                result.notImplemented()
-            }
-        }
     }
 
     private fun checkForUpdate(result: MethodChannel.Result) {
-        val updateUrl = "https://github.com/tlmile/FrostedGlass_Clicker/blob/main/doc/update.json"
+        val updateUrl = "https://raw.githubusercontent.com/tlmile/FrostedGlass_Clicker/main/doc/update.json"
         val client = OkHttpClient()
         val request = Request.Builder().url(updateUrl).build()
 
         Thread {
             try {
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    val jsonObject = JSONObject(responseBody)
+                client.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string() ?: "{}"
+                        val jsonObject = JSONObject(responseBody)
 
-                    val latestVersion = jsonObject.getString("version")
-                    val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                        val latestVersion = jsonObject.optString("version", "")
+                        val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
 
-                    if (latestVersion != currentVersion) {
-                        // 如果有新版本，返回 true
-                        result.success(true)
+                        val hasUpdate = latestVersion.isNotEmpty() && latestVersion != (currentVersion ?: "")
+                        result.success(hasUpdate)
                     } else {
-                        // 没有新版本，返回 false
                         result.success(false)
                     }
-                } else {
-                    result.success(false)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MainActivity", "checkForUpdate failed", e)
                 result.success(false)
             }
         }.start()
@@ -77,6 +64,17 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL,
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "checkForUpdate") {
+                checkForUpdate(result)
+            } else {
+                result.notImplemented()
+            }
+        }
 
         val channel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
