@@ -109,6 +109,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0") // 添加 OkHttp 依赖
+    implementation("org.json:json:20210307") // 添加 org.json 依赖（用于处理 JSON）
 }
 
 flutter {

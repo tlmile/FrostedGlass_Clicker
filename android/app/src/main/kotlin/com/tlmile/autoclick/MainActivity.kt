@@ -14,6 +14,15 @@ import io.flutter.plugin.common.MethodChannel
 import android.content.ComponentName
 import android.text.TextUtils
 
+//应用升级及更新
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
+
+import android.os.Bundle
+
+
+
 
 class MainActivity : FlutterActivity() {
 
