@@ -35,7 +35,7 @@ Here are some screenshots of the AutoClick tool in action:
 
 Here is a demo video of AutoClick tool in action:
 
-[![Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://github.com/tlmile/FrostedGlass_Clicker/blob/main/doc/imgs/click.mp4)
+[Demo Video](https://github.com/tlmile/FrostedGlass_Clicker/blob/main/doc/videos/click.mp4)
 
 ## Installation
 
