@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 底层：轻微暗角，增强悬浮层次（不是黑块） -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#12000000" /> <!-- 7% 黑，仅用于层次 -->
+        </shape>
+    </item>
+
+    <!-- 中层：玻璃渐变底 -->
+    <item android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="#24FFFFFF"
+                android:endColor="#1A7C5CFF" />
+        </shape>
+    </item>
+
+    <!-- 顶层：高光描边 -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <stroke android:width="1dp" android:color="#33FFFFFF" />
+        </shape>
+    </item>
+
+</layer-list>

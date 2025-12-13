@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/configRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <!-- Popover container (positioned by code) -->
+    <FrameLayout
+        android:id="@+id/configPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- Arrow (shown/positioned by code when possible) -->
+        <View
+            android:id="@+id/configArrow"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:rotation="45"
+            android:background="@drawable/bg_config_arrow"
+            android:visibility="gone" />
+
+        <!-- Content -->
+        <LinearLayout
+            android:id="@+id/configContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp"
+            android:background="@drawable/bg_config_panel">
+
+            <TextView
+                android:id="@+id/btnEditTask"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:minWidth="64dp"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="编辑"
+                android:textColor="#F5F7FF"
+                android:textSize="13sp"
+                android:background="@drawable/bg_glass_action_button" />
+
+            <TextView
+                android:id="@+id/btnExecuteTask"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:minWidth="64dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="执行"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:background="@drawable/bg_glass_button_primary_ripple" />
+
+            <!-- "+" : bigger + bold + true center -->
+            <TextView
+                android:id="@+id/btnNextStep"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:text="+"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:includeFontPadding="false"
+                android:padding="0dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#EAF2FF"
+                android:background="@drawable/bg_glass_plus_button"
+                android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>
