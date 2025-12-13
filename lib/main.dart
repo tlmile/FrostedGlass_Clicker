@@ -5,6 +5,8 @@ import 'models/task_entity.dart';
 import 'start_page.dart';
 import 'update_checker.dart'; // 导入 UpdateChecker 类
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -17,11 +19,19 @@ Future<void> main() async {
   await Hive.openBox<TaskEntity>('tasks');
   await Hive.openBox<StepEntity>('steps');
 
-  // 在应用启动时检查更新
   final updateChecker = UpdateChecker();
-  updateChecker.checkForUpdate();
 
   runApp(const AutoClickApp());
+
+  // 在第一帧绘制完成后检查更新，确保有上下文可用
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      updateChecker.checkForUpdate(context: context);
+    } else {
+      updateChecker.checkForUpdate();
+    }
+  });
 }
 
 class AutoClickApp extends StatelessWidget {
@@ -32,6 +42,7 @@ class AutoClickApp extends StatelessWidget {
     return MaterialApp(
       title: 'AutoClick',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
