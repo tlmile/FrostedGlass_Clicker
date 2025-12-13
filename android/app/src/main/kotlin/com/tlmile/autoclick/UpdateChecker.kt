@@ -43,7 +43,7 @@ class UpdateChecker(private val context: Context) {
     private fun getCurrentVersion(): String {
         val packageManager = context.packageManager
         val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
-        return packageInfo.versionName
+        return packageInfo.versionName ?: ""
     }
 
     private fun showUpdateDialog(apkUrl: String, changelog: String, forceUpdate: Boolean) {
