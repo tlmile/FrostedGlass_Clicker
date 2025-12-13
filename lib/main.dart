@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/task_entity.dart';
 import 'start_page.dart';
+import 'update_checker.dart'; // 导入 UpdateChecker 类
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +16,10 @@ Future<void> main() async {
 
   await Hive.openBox<TaskEntity>('tasks');
   await Hive.openBox<StepEntity>('steps');
+
+  // 在应用启动时检查更新
+  final updateChecker = UpdateChecker();
+  updateChecker.checkForUpdate();
 
   runApp(const AutoClickApp());
 }

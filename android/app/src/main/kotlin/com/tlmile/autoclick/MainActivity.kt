@@ -19,6 +19,53 @@ class MainActivity : FlutterActivity() {
 
     private val channelName = "auto_click_channel"
 
+
+    private val CHANNEL = "com.tlmile.autoclick/update"  // Flutter 层和 Android 原生层通信的通道
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        MethodChannel(flutterEngine?.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
+            if (call.method == "checkForUpdate") {
+                checkForUpdate(result)  // 调用检查更新的方法
+            } else {
+                result.notImplemented()
+            }
+        }
+    }
+
+    private fun checkForUpdate(result: MethodChannel.Result) {
+        val updateUrl = "https://github.com/tlmile/FrostedGlass_Clicker/blob/main/doc/update.json"
+        val client = OkHttpClient()
+        val request = Request.Builder().url(updateUrl).build()
+
+        Thread {
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val jsonObject = JSONObject(responseBody)
+
+                    val latestVersion = jsonObject.getString("version")
+                    val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
+
+                    if (latestVersion != currentVersion) {
+                        // 如果有新版本，返回 true
+                        result.success(true)
+                    } else {
+                        // 没有新版本，返回 false
+                        result.success(false)
+                    }
+                } else {
+                    result.success(false)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                result.success(false)
+            }
+        }.start()
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
